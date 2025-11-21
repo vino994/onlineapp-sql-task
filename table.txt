@@ -1,0 +1,70 @@
+CREATE DATABASE TABLE 
+-----------------------
+
+show databases;
+
+create database onlineapp;
+
+use onlineapp;
+
+create table customers( id int auto_increment primary key,
+name varchar(255) not null,
+email varchar(255) not null,
+address varchar(255) not null
+);
+
+create table products( id int auto_increment primary key,
+name varchar(255) not null,
+price decimal(10,2),
+description varchar(255) not null
+);
+
+create table orders( id int auto_increment primary key,
+cus_id int,
+order_data date,
+total_amount decimal(10,2),
+foreign key (cus_id) references customers(id)
+);
+
+
+select * from orders;
+
+insert into customers(name,email,address) values
+('Vinoth', 'vinoth@example.com', 'Chennai'),
+('Sanjeevi', 'sanjeevi@example.com', 'Erode'),
+('Rahul', 'rahul@example.com', 'Coimbatore');
+
+select * from customers;
+
+1	Vinoth	vinoth@example.com	Chennai
+2	Sanjeevi	sanjeevi@example.com	Erode
+3	Rahul	rahul@example.com	Coimbatore
+			
+
+insert into products(name,price,description) values
+('Product A', 50.00, 'High quality product'),
+('Product B', 30.00, 'Popular product'),
+('Product C', 40.00, 'Premium product'),
+('Product D', 75.00, 'Best selling product');
+
+select * from products;
+
+1	Product A	50.00	High quality product
+2	Product B	30.00	Popular product
+3	Product C	40.00	Premium product
+4	Product D	75.00	Best selling product
+
+
+insert into orders (cus_id,order_data,total_amount) values
+(1,CURDATE() - INTERVAL 10 DAY,180.00),
+(2,curdate(),250.00),
+(2,CURDATE() - INTERVAL 20 DAY,300.00),
+(3,CURDATE() - INTERVAL 30 DAY,240.00);
+
+select * from orders;
+
+1	1	2025-11-11	180.00
+2	2	2025-11-21	250.00
+3	2	2025-11-01	300.00
+4	3	2025-10-22	240.00
+			

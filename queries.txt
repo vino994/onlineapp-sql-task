@@ -1,0 +1,172 @@
+
+😍   Retrieve all customers who have placed an order in the last 30 days.
+
+           SELECT DISTINCT c.*
+           FROM customers c
+           JOIN orders o ON c.id = o.cus_id
+           WHERE o.order_data >= DATE_SUB(CURDATE(), INTERVAL 30 DAY);
+
+     OUTPUT :-
+          
+           1	Vinoth	    vinoth@example.com	    Chennai
+           2	Sanjeevi	sanjeevi@example.com	Erode
+           3	Rahul	    rahul@example.com	    Coimbatore
+
+
+😍   Get the total amount of all orders placed by each customer.
+
+            SELECT c.name ,sum(o.total_amount) As totalspend
+            FROM customers c
+            JOIN orders o ON c.id=o.cus_id
+            GROUP BY c.id;
+    
+      OUTPUT :-
+
+                 Vinoth	    540.00
+                 Sanjeevi	1650.00
+                 Rahul	    720.00
+			
+
+😍   Update the price of Product C to 45.00.
+
+              UPDATE products 
+              SET price = 45.00 
+              WHERE id = 3;
+    
+      OUTPUT :-
+
+           1	Product A	50.00	High quality product
+           2	Product B	30.00	Popular product
+           3	Product C	45.00	Premium product
+           4	Product D	75.00	Best selling product
+
+
+😍   Add a new column discount to the products table.
+
+             ALTER TABLE products
+             ADD discount DECIMAL(5,2) DEFAULT 0.00;
+             SELECT * FROM products;
+
+      OUTPUT :-
+
+            1	Product A	50.00	High quality product	0.00
+            2	Product B	30.00	Popular product	        0.00
+            3	Product C	45.00	Premium product	        0.00
+            4	Product D	75.00	Best selling product	0.00
+
+
+😍   Retrieve the top 3 products with the highest price.
+
+             SELECT * FROM products
+             ORDER BY price desc LIMIT 3;
+
+      OUTPUT :-
+
+            4	Product D	75.00	Best selling product	0.00
+            1	Product A	50.00	High quality product	0.00
+            3	Product C	45.00	Premium product	        0.00
+
+				
+😍   Get the names of customers who have ordered Product A.
+
+
+        😁Normalization (i need Normalize for this so i created before) : 
+
+              CREATE TABLE orderitem(id INT AUTO_INCREMENT PRIMARY KEY,
+               order_id int,
+               product_id int,
+               quantity int,
+               price DECIMAL(10,2),
+               FOREIGN KEY (order_id) REFERENCES orders(id),
+               FOREIGN KEY (product_id) REFERENCES products(id)
+               );  
+
+               INSERT INTO orderitem(order_id,product_id,quantity,price) VALUES
+               (1, 1, 2, 50.00),
+               (1, 2, 1, 30.00),
+               (2, 3, 1, 40.00),
+               (3, 4, 2, 75.00),
+               (4, 1, 1, 50.00);
+               
+               SELECT DISTINCT c.name
+               FROM customers c
+               JOIN orders o ON c.id = o.cus_id
+               JOIN orderitem oi ON o.id = oi.order_id
+               JOIN products p ON p.id = oi.product_id
+               WHERE p.name = 'Product A';  
+
+           OUTPUT :-
+
+                 	name
+	                Rahul
+	                Vinoth
+
+
+😍   Join the orders and customers tables to retrieve the customer's name and order date for each order.
+
+
+              SELECT c.name, o.order_data
+              FROM customers c
+              JOIN orders o ON c.id = o.cus_id;
+
+          OUTPUT :-
+
+              Vinoth	2025-11-11
+              Vinoth	2025-11-11
+              Vinoth	2025-10-12
+              Sanjeevi	2025-11-21
+              Sanjeevi	2025-11-01
+              Sanjeevi	2025-11-21
+              Sanjeevi	2025-10-02
+              Sanjeevi	2025-11-21
+              Sanjeevi	2025-10-02
+              Rahul	    2025-10-22
+              Rahul	    2025-10-22
+              Rahul	    2025-10-22    
+        
+😍   Retrieve the orders with a total amount greater than 150.00.
+
+              SELECT * 
+              FROM orders
+              where total_amount > 150.00;
+
+        OUTPUT :-
+
+              1	  1	  2025-11-11  180.00
+              2	  2	  2025-11-21  250.00
+              3	  2	  2025-11-01  300.00
+              4	  3	  2025-10-22  240.00
+              5	  1	  2025-11-11  180.00
+              6	  2	  2025-11-21  250.00
+              7	  2	  2025-10-02  300.00
+              8	  3	  2025-10-22  240.00
+              9	  1	  2025-10-12  180.00
+              10  2	  2025-11-21  250.00
+              11  2	  2025-10-02  300.00
+              12  3	  2025-10-22  240.00
+			
+😍   Normalize the database by creating a separate table for order items and updating the orders table to reference the order_items table.
+
+
+              
+              CREATE TABLE orderitem(id INT AUTO_INCREMENT PRIMARY KEY,
+               order_id int,
+               product_id int,
+               quantity int,
+               price DECIMAL(10,2),
+               FOREIGN KEY (order_id) REFERENCES orders(id),
+               FOREIGN KEY (product_id) REFERENCES products(id)
+               );  
+
+
+😍   Retrieve the average total of all orders.
+
+
+             SELECT AVG(total_amount) AS average_order_total
+             FROM orders;
+
+        OUTPUT :-
+
+
+                average_order_total
+                242.500000
